@@ -7,6 +7,39 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNumberOfUint64Needed(t *testing.T) {
+	testCases := []struct {
+		nbits    int
+		expected int
+	}{
+		{
+			nbits:    1,
+			expected: 1,
+		},
+		{
+			nbits:    64,
+			expected: 1,
+		},
+		{
+			nbits:    65,
+			expected: 2,
+		},
+		{
+			nbits:    0,
+			expected: 0,
+		},
+		{
+			nbits:    -5,
+			expected: 0,
+		},
+	}
+
+	for _, test := range testCases {
+		result := howManyUint64(test.nbits)
+		assert.Equal(t, test.expected, result)
+	}
+}
+
 func TestSet(t *testing.T) {
 	nbits := 65
 	s := NewSet(WithInitialBits(nbits))

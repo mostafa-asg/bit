@@ -24,7 +24,7 @@ func NewSet(options ...Option) *Set {
 
 func newSet(opts *Options) *Set {
 	return &Set{
-		arr: make([]uint64, opts.nbits/minBits+1),
+		arr: make([]uint64, howManyUint64(opts.nbits)),
 	}
 }
 
@@ -44,6 +44,15 @@ func locate(index int) (arrIndex int, bitIndex int) {
 	arrIndex = index / minBits
 	bitIndex = index - (arrIndex * minBits)
 	return
+}
+
+// howManyUint64 returns how many uint64 is needed for storing N bits of data
+func howManyUint64(nbits int) int {
+	if nbits <= 0 {
+		return 0
+	}
+
+	return (nbits-1)/minBits + 1
 }
 
 // Clear sets the bit specified by the index to false.
