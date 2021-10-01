@@ -74,6 +74,30 @@ func TestSet(t *testing.T) {
 	assert.True(t, s.Get(50))
 }
 
+func TestCardinality(t *testing.T) {
+	testCases := []struct {
+		set         *Set
+		cardinality int
+	}{
+		{
+			set:         ValueOf([]uint64{15}),
+			cardinality: 4,
+		},
+		{
+			set:         ValueOf([]uint64{1, 1}),
+			cardinality: 2,
+		},
+		{
+			set:         ValueOf([]uint64{^uint64(0), ^uint64(0)}),
+			cardinality: 128,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.cardinality, test.set.Cardinality())
+	}
+}
+
 func checkBits(t *testing.T, s *Set, trueIndexes map[int]bool) {
 	for i := 0; i < s.Size(); i++ {
 		_, mustTrue := trueIndexes[i]

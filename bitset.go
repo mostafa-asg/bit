@@ -28,6 +28,17 @@ func newSet(opts *Options) *Set {
 	}
 }
 
+// ValueOf returns a new bit set containing all the bits in the given long array.
+func ValueOf(nums []uint64) *Set {
+	set := NewSet(WithInitialBits(len(nums) * minBits))
+
+	for i, num := range nums {
+		set.arr[i] = num
+	}
+
+	return set
+}
+
 // locate find the index within the array
 func locate(index int) (arrIndex int, bitIndex int) {
 	arrIndex = index / minBits
@@ -84,4 +95,19 @@ func (set *Set) Get(index int) bool {
 // to represent bit values.
 func (set *Set) Size() int {
 	return len(set.arr) * minBits
+}
+
+// Cardinality returns the number of bits set to true in this BitSet.
+func (set *Set) Cardinality() int {
+	count := 0
+
+	for _, item := range set.arr {
+		n := item
+		for n > 0 {
+			n = n & (n - 1)
+			count++
+		}
+	}
+
+	return count
 }
