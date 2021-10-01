@@ -1,5 +1,7 @@
 package bit
 
+import "errors"
+
 const (
 	// determines the minimum allocation bits on initialization or on grows
 	// if you change this, you should also change the array item type which is uint64
@@ -10,7 +12,7 @@ type Set struct {
 	arr []uint64
 }
 
-func NewSet(options ...Option) *Set {
+func NewSet(options ...Option) (*Set, error) {
 	ops := &Options{
 		nbits: 64,
 	}
@@ -22,15 +24,23 @@ func NewSet(options ...Option) *Set {
 	return newSet(ops)
 }
 
-func newSet(opts *Options) *Set {
+func newSet(opts *Options) (*Set, error) {
+	if opts.nbits < 0 {
+		return nil, errors.New("Number of bits is negative")
+	}
+
+	if opts.nbits == 0 {
+		opts.nbits = minBits
+	}
+
 	return &Set{
 		arr: make([]uint64, howManyUint64(opts.nbits)),
-	}
+	}, nil
 }
 
 // ValueOf returns a new bit set containing all the bits in the given long array.
 func ValueOf(nums []uint64) *Set {
-	set := NewSet(WithInitialBits(len(nums) * minBits))
+	set, _ := NewSet(WithInitialBits(len(nums) * minBits))
 
 	for i, num := range nums {
 		set.arr[i] = num

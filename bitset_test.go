@@ -42,7 +42,11 @@ func TestNumberOfUint64Needed(t *testing.T) {
 
 func TestSet(t *testing.T) {
 	nbits := 65
-	s := NewSet(WithInitialBits(nbits))
+	s, err := NewSet(WithInitialBits(nbits))
+	if err != nil {
+		t.FailNow()
+	}
+
 	trueIndexes := make(map[int]bool)
 
 	// all bits are initially false
