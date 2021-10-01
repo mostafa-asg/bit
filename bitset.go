@@ -38,7 +38,7 @@ func locate(index int) (arrIndex int, bitIndex int) {
 // Clear sets the bit specified by the index to false.
 func (set *Set) Clear(index int) {
 	arrIndex, bitIndex := locate(index)
-	set.arr[arrIndex] = set.arr[arrIndex] ^ (1 << bitIndex)
+	set.arr[arrIndex] = set.arr[arrIndex] & (^(1 << bitIndex))
 }
 
 // ClearRange sets the bits from the specified fromIndex (inclusive)
@@ -51,10 +51,6 @@ func (set *Set) ClearRange(fromIndex int, toIndex int) {
 
 // Set sets the bit at the specified index to true.
 func (set *Set) Set(index int) {
-	if index == 63 {
-		println("salam")
-	}
-
 	arrIndex, bitIndex := locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] | (1 << bitIndex)
 }
