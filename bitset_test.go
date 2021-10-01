@@ -135,6 +135,79 @@ func TestCardinality(t *testing.T) {
 	}
 }
 
+func TestAnd(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		set2     *Set
+		expected *Set
+	}{
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{10}),
+			expected: ValueOf([]uint64{10}),
+		},
+		{
+			set1:     ValueOf([]uint64{15, 32}),
+			set2:     ValueOf([]uint64{10}),
+			expected: ValueOf([]uint64{10, 32}),
+		},
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{10, 32}),
+			expected: ValueOf([]uint64{10}),
+		},
+	}
+
+	for _, test := range testCases {
+		result := test.set1.And(test.set2)
+		assert.True(t, test.expected.Equal(result))
+	}
+}
+
+func TestEqual(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		set2     *Set
+		expected bool
+	}{
+		{
+			set1:     ValueOf([]uint64{83, 12}),
+			set2:     ValueOf([]uint64{83, 12}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{83, 12}),
+			set2:     ValueOf([]uint64{83, 11}),
+			expected: false,
+		},
+		{
+			set1:     ValueOf([]uint64{11, 20, 0, 0}),
+			set2:     ValueOf([]uint64{11, 20}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{11, 20, 0, 0, 1}),
+			set2:     ValueOf([]uint64{11, 20}),
+			expected: false,
+		},
+		{
+			set1:     ValueOf([]uint64{66, 90}),
+			set2:     ValueOf([]uint64{66, 90, 0, 0}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{66, 90}),
+			set2:     ValueOf([]uint64{66, 90, 0, 0, 2}),
+			expected: false,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set1.Equal(test.set2))
+		assert.Equal(t, test.expected, test.set2.Equal(test.set1))
+	}
+}
+
 func checkBits(t *testing.T, s *Set, trueIndexes map[int]bool) {
 	for i := 0; i < s.Size(); i++ {
 		_, mustTrue := trueIndexes[i]

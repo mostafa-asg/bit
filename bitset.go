@@ -130,3 +130,51 @@ func (set *Set) Cardinality() int {
 
 	return count
 }
+
+// And performs a logical AND of this target bit set with the argument bit set.
+func (set *Set) And(otherSet *Set) *Set {
+	length := min(len(set.arr), len(otherSet.arr))
+
+	for i := 0; i < length; i++ {
+		set.arr[i] &= otherSet.arr[i]
+	}
+
+	return set
+}
+
+// Equal checks equality between this set and the other set passed in the argument.
+func (set *Set) Equal(otherSet *Set) bool {
+	length := min(len(set.arr), len(otherSet.arr))
+
+	for i := 0; i < length; i++ {
+		if set.arr[i] != otherSet.arr[i] {
+			return false
+		}
+	}
+
+	// if array's length is different, only they are equal if array's items equal to zero
+	var arr []uint64
+	if len(set.arr) > len(otherSet.arr) {
+		arr = set.arr[length:]
+	} else if len(otherSet.arr) > len(set.arr) {
+		arr = otherSet.arr[length:]
+	}
+
+	if len(arr) > 0 {
+		for i := 0; i < len(arr); i++ {
+			if arr[i] != 0 {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+
+	return b
+}
