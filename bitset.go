@@ -150,6 +150,17 @@ func (set *Set) And(otherSet *Set) *Set {
 	return set
 }
 
+// Xor performs a logical XOR of this bit set with the bit set argument.
+func (set *Set) Xor(otherSet *Set) *Set {
+	length := min(len(set.arr), len(otherSet.arr))
+
+	for i := 0; i < length; i++ {
+		set.arr[i] ^= otherSet.arr[i]
+	}
+
+	return set
+}
+
 // Equal checks equality between this set and the other set passed in the argument.
 func (set *Set) Equal(otherSet *Set) bool {
 	length := min(len(set.arr), len(otherSet.arr))
