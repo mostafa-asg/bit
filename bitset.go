@@ -79,6 +79,14 @@ func (set *Set) ClearRange(fromIndex int, toIndex int) {
 	}
 }
 
+// ClearAll sets all of the bits in this BitSet to false.
+func (set *Set) ClearAll() *Set {
+	for i := range set.arr {
+		set.arr[i] = 0
+	}
+	return set
+}
+
 // Set sets the bit at the specified index to true.
 func (set *Set) Set(index int) {
 	arrIndex, bitIndex := locate(index)

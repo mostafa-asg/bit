@@ -218,3 +218,23 @@ func checkBits(t *testing.T, s *Set, trueIndexes map[int]bool) {
 		}
 	}
 }
+
+func TestClearAll(t *testing.T) {
+	testCases := []struct {
+		set      *Set
+		expected *Set
+	}{
+		{
+			set:      ValueOf([]uint64{6361}),
+			expected: ValueOf([]uint64{0}),
+		},
+		{
+			set:      ValueOf([]uint64{83, 12}),
+			expected: ValueOf([]uint64{0, 0}),
+		},
+	}
+
+	for _, test := range testCases {
+		assert.True(t, test.expected.Equal(test.set.ClearAll()))
+	}
+}
