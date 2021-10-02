@@ -193,6 +193,39 @@ func TestXor(t *testing.T) {
 	}
 }
 
+func TestAndNot(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		set2     *Set
+		expected *Set
+	}{
+		{
+			set1:     ValueOf([]uint64{7}),
+			set2:     ValueOf([]uint64{13}),
+			expected: ValueOf([]uint64{2}),
+		},
+		{
+			set1:     ValueOf([]uint64{0}),
+			set2:     ValueOf([]uint64{15}),
+			expected: ValueOf([]uint64{0}),
+		},
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{0}),
+			expected: ValueOf([]uint64{15}),
+		},
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{15}),
+			expected: ValueOf([]uint64{0}),
+		},
+	}
+
+	for _, test := range testCases {
+		result := test.set1.AndNot(test.set2)
+		assert.True(t, test.expected.Equal(result))
+	}
+}
 func TestEqual(t *testing.T) {
 	testCases := []struct {
 		set1     *Set

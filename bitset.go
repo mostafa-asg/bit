@@ -150,6 +150,14 @@ func (set *Set) And(otherSet *Set) *Set {
 	return set
 }
 
+// AndNot clears all of the bits in this BitSet whose corresponding bit is
+// set in the specified BitSet.
+func (set *Set) AndNot(otherSet *Set) *Set {
+	tmp := set.Copy()
+	tmp.And(otherSet)
+	return set.Xor(tmp)
+}
+
 // Xor performs a logical XOR of this bit set with the bit set argument.
 func (set *Set) Xor(otherSet *Set) *Set {
 	length := min(len(set.arr), len(otherSet.arr))
@@ -188,6 +196,17 @@ func (set *Set) Equal(otherSet *Set) bool {
 	}
 
 	return true
+}
+
+// Copy creates a new copy of the current set
+func (set *Set) Copy() *Set {
+	copySet, _ := NewSet(WithInitialBits(len(set.arr) * minBits))
+
+	for i, item := range set.arr {
+		copySet.arr[i] = item
+	}
+
+	return copySet
 }
 
 func min(a, b int) int {
