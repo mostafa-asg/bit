@@ -49,22 +49,6 @@ func ValueOf(nums []uint64) *Set {
 	return set
 }
 
-// locate find the index within the array
-func locate(index int) (arrIndex int, bitIndex int) {
-	arrIndex = index / minBits
-	bitIndex = index - (arrIndex * minBits)
-	return
-}
-
-// howManyUint64 returns how many uint64 is needed for storing N bits of data
-func howManyUint64(nbits int) int {
-	if nbits <= 0 {
-		return 0
-	}
-
-	return (nbits-1)/minBits + 1
-}
-
 // Flip sets the bit at the specified index to the complement of its current value.
 func (set *Set) Flip(index int) *Set {
 	arrIndex, bitIndex := locate(index)
@@ -214,6 +198,32 @@ func (set *Set) Clone() *Set {
 	}
 
 	return copySet
+}
+
+func (set *Set) expandIfNeeded(arrIndex int) {
+	lastIndexNum := len(set.arr) - 1
+	if arrIndex > lastIndexNum {
+		itemsNeeded := arrIndex - lastIndexNum
+		for i := 1; i <= itemsNeeded; i++ {
+			set.arr = append(set.arr, uint64(0))
+		}
+	}
+}
+
+// locate find the index within the array
+func locate(index int) (arrIndex int, bitIndex int) {
+	arrIndex = index / minBits
+	bitIndex = index - (arrIndex * minBits)
+	return
+}
+
+// howManyUint64 returns how many uint64 is needed for storing N bits of data
+func howManyUint64(nbits int) int {
+	if nbits <= 0 {
+		return 0
+	}
+
+	return (nbits-1)/minBits + 1
 }
 
 func min(a, b int) int {

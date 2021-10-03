@@ -316,3 +316,24 @@ func TestFlip(t *testing.T) {
 	s.Flip(3)
 	assert.True(t, ValueOf([]uint64{14}).Equal(s))
 }
+
+func TestArrayExpansion(t *testing.T) {
+	s, err := NewSet()
+	if err != nil {
+		t.Fail()
+	}
+
+	assert.Equal(t, 1, len(s.arr))
+
+	// no need to expansion
+	s.expandIfNeeded(0)
+	assert.Equal(t, 1, len(s.arr))
+
+	// request access to index 3
+	s.expandIfNeeded(3)
+	assert.Equal(t, 4, len(s.arr))
+
+	// no need to expansion
+	s.expandIfNeeded(2)
+	assert.Equal(t, 4, len(s.arr))
+}
