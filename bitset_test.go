@@ -328,6 +328,21 @@ func TestFlip(t *testing.T) {
 	assert.True(t, ValueOf([]uint64{14, 256}).Equal(s))
 }
 
+func TestFlipRange(t *testing.T) {
+	s, err := NewSet()
+	if err != nil {
+		t.Fail()
+	}
+	// also expansion test
+	s.FlipRange(63, 65)
+	expected := ValueOf([]uint64{1 << 63, 1})
+	assert.True(t, expected.Equal(s))
+
+	s.FlipRange(63, 65)
+	expected = ValueOf([]uint64{0, 0})
+	assert.True(t, expected.Equal(s))
+}
+
 func TestArrayExpansion(t *testing.T) {
 	s, err := NewSet()
 	if err != nil {

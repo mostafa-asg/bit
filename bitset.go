@@ -56,6 +56,15 @@ func (set *Set) Flip(index int) *Set {
 	return set
 }
 
+// FlipRange sets each bit from the specified fromIndex (inclusive)
+// to the specified toIndex (exclusive) to the complement of its current value.
+func (set *Set) FlipRange(fromIndex int, toIndex int) *Set {
+	for i := fromIndex; i < toIndex; i++ {
+		set.Flip(i)
+	}
+	return set
+}
+
 // Clear sets the bit specified by the index to false.
 func (set *Set) Clear(index int) {
 	arrIndex, bitIndex := set.locate(index)
