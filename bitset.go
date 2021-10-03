@@ -51,14 +51,14 @@ func ValueOf(nums []uint64) *Set {
 
 // Flip sets the bit at the specified index to the complement of its current value.
 func (set *Set) Flip(index int) *Set {
-	arrIndex, bitIndex := locate(index)
+	arrIndex, bitIndex := set.locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] ^ (1 << bitIndex)
 	return set
 }
 
 // Clear sets the bit specified by the index to false.
 func (set *Set) Clear(index int) {
-	arrIndex, bitIndex := locate(index)
+	arrIndex, bitIndex := set.locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] & (^(1 << bitIndex))
 }
 
@@ -80,7 +80,7 @@ func (set *Set) ClearAll() *Set {
 
 // Set sets the bit at the specified index to true.
 func (set *Set) Set(index int) {
-	arrIndex, bitIndex := locate(index)
+	arrIndex, bitIndex := set.locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] | (1 << bitIndex)
 }
 
@@ -104,7 +104,7 @@ func (set *Set) SetValue(index int, value bool) {
 
 // Get returns the value of the bit with the specified index.
 func (set *Set) Get(index int) bool {
-	arrIndex, bitIndex := locate(index)
+	arrIndex, bitIndex := set.locate(index)
 	value := set.arr[arrIndex] & (1 << bitIndex)
 	return value > 0
 }
@@ -210,10 +210,14 @@ func (set *Set) expandIfNeeded(arrIndex int) {
 	}
 }
 
-// locate find the index within the array
-func locate(index int) (arrIndex int, bitIndex int) {
+// locate find the index within the array, it also expands the array
+// if index is out of range
+func (set *Set) locate(index int) (arrIndex int, bitIndex int) {
 	arrIndex = index / minBits
 	bitIndex = index - (arrIndex * minBits)
+
+	set.expandIfNeeded(arrIndex)
+
 	return
 }
 

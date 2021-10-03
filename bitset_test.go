@@ -71,6 +71,10 @@ func TestSet(t *testing.T) {
 	trueIndexes[64] = true
 	checkBits(t, s, trueIndexes)
 
+	// expansion test
+	s.Set(3 * minBits)
+	trueIndexes[3*minBits] = true
+	checkBits(t, s, trueIndexes)
 	// ------------------------
 	// Clear
 	// ------------------------
@@ -90,11 +94,14 @@ func TestSet(t *testing.T) {
 	delete(trueIndexes, 64)
 	checkBits(t, s, trueIndexes)
 
+	s.Clear(3 * minBits)
+	delete(trueIndexes, 3*minBits)
+	checkBits(t, s, trueIndexes)
 	//-------------------------
 	// SetRange
 	// ------------------------
-	s.SetRange(50, nbits)
-	for i := 50; i < nbits; i++ {
+	s.SetRange(50, 4*minBits)
+	for i := 50; i < 4*minBits; i++ {
 		trueIndexes[i] = true
 	}
 	checkBits(t, s, trueIndexes)
@@ -102,8 +109,8 @@ func TestSet(t *testing.T) {
 	// ------------------------
 	// ClearRange
 	// ------------------------
-	s.ClearRange(51, nbits)
-	for i := 51; i < nbits; i++ {
+	s.ClearRange(51, 4*minBits)
+	for i := 51; i < 4*minBits; i++ {
 		delete(trueIndexes, i)
 	}
 	checkBits(t, s, trueIndexes)
@@ -315,6 +322,10 @@ func TestFlip(t *testing.T) {
 
 	s.Flip(3)
 	assert.True(t, ValueOf([]uint64{14}).Equal(s))
+
+	// expansion test
+	s.Flip(72)
+	assert.True(t, ValueOf([]uint64{14, 256}).Equal(s))
 }
 
 func TestArrayExpansion(t *testing.T) {
