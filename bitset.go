@@ -153,7 +153,7 @@ func (set *Set) And(otherSet *Set) *Set {
 // AndNot clears all of the bits in this BitSet whose corresponding bit is
 // set in the specified BitSet.
 func (set *Set) AndNot(otherSet *Set) *Set {
-	tmp := set.Copy()
+	tmp := set.Clone()
 	tmp.And(otherSet)
 	return set.Xor(tmp)
 }
@@ -198,8 +198,8 @@ func (set *Set) Equal(otherSet *Set) bool {
 	return true
 }
 
-// Copy creates a new copy of the current set
-func (set *Set) Copy() *Set {
+// Clone creates a new copy of the current set
+func (set *Set) Clone() *Set {
 	copySet, _ := NewSet(WithInitialBits(len(set.arr) * minBits))
 
 	for i, item := range set.arr {
