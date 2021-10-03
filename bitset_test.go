@@ -300,3 +300,19 @@ func TestClearAll(t *testing.T) {
 		assert.True(t, test.expected.Equal(test.set.ClearAll()))
 	}
 }
+
+func TestFlip(t *testing.T) {
+	s := ValueOf([]uint64{14})
+
+	s.Flip(0)
+	assert.True(t, ValueOf([]uint64{15}).Equal(s))
+
+	s.Flip(0)
+	assert.True(t, ValueOf([]uint64{14}).Equal(s))
+
+	s.Flip(3)
+	assert.True(t, ValueOf([]uint64{6}).Equal(s))
+
+	s.Flip(3)
+	assert.True(t, ValueOf([]uint64{14}).Equal(s))
+}

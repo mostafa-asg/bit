@@ -65,6 +65,13 @@ func howManyUint64(nbits int) int {
 	return (nbits-1)/minBits + 1
 }
 
+// Flip sets the bit at the specified index to the complement of its current value.
+func (set *Set) Flip(index int) *Set {
+	arrIndex, bitIndex := locate(index)
+	set.arr[arrIndex] = set.arr[arrIndex] ^ (1 << bitIndex)
+	return set
+}
+
 // Clear sets the bit specified by the index to false.
 func (set *Set) Clear(index int) {
 	arrIndex, bitIndex := locate(index)
