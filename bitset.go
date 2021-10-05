@@ -209,6 +209,21 @@ func (set *Set) Clone() *Set {
 	return copySet
 }
 
+// Intersects returns true if the specified BitSet has any bits set to true that
+// are also set to true in this BitSet.
+func (set *Set) Intersects(otherSet *Set) bool {
+
+	for _, item := range set.arr {
+		for _, otherItem := range otherSet.arr {
+			if item&otherItem > 0 {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 func (set *Set) expandIfNeeded(arrIndex int) {
 	lastIndexNum := len(set.arr) - 1
 	if arrIndex > lastIndexNum {

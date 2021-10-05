@@ -363,3 +363,36 @@ func TestArrayExpansion(t *testing.T) {
 	s.expandIfNeeded(2)
 	assert.Equal(t, 4, len(s.arr))
 }
+
+func TestIntersects(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		set2     *Set
+		expected bool
+	}{
+		{
+			set1:     ValueOf([]uint64{8}),
+			set2:     ValueOf([]uint64{2}),
+			expected: false,
+		},
+		{
+			set1:     ValueOf([]uint64{8, 1, 4}),
+			set2:     ValueOf([]uint64{2, 0, 12}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{0, 0, 10}),
+			set2:     ValueOf([]uint64{8}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{10}),
+			set2:     ValueOf([]uint64{0, 0, 0, 0, 8}),
+			expected: true,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set1.Intersects(test.set2))
+	}
+}
