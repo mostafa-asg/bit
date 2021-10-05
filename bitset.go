@@ -241,6 +241,16 @@ func (set *Set) IsEmpty() bool {
 // NextClearBit returns the index of the first bit that is set to false that
 // occurs on or after the specified starting index.
 func (set *Set) NextClearBit(fromIndex int) (int, error) {
+	return set.nextBitIndex(fromIndex, false)
+}
+
+// NextSetBit returns the index of the first bit that is set to true that
+// occurs on or after the specified starting index.
+func (set *Set) NextSetBit(fromIndex int) (int, error) {
+	return set.nextBitIndex(fromIndex, true)
+}
+
+func (set *Set) nextBitIndex(fromIndex int, value bool) (int, error) {
 	if fromIndex < 0 {
 		return -1, fmt.Errorf("Index should be positive: %d", fromIndex)
 	}
@@ -251,7 +261,7 @@ func (set *Set) NextClearBit(fromIndex int) (int, error) {
 	}
 
 	for i := fromIndex; i <= lastIndex; i++ {
-		if set.Get(i) == false {
+		if set.Get(i) == value {
 			return i, nil
 		}
 	}

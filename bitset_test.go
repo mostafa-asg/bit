@@ -485,3 +485,49 @@ func TestNextClearBit(t *testing.T) {
 		assert.Equal(t, test.expected, index)
 	}
 }
+
+func TestNextSetBit(t *testing.T) {
+	testCases := []struct {
+		set1        *Set
+		fromIndex   int
+		expected    int
+		expectError bool
+	}{
+		{
+			set1:     ValueOf([]uint64{8}),
+			expected: 3,
+		},
+		{
+			set1:     ValueOf([]uint64{1}),
+			expected: 0,
+		},
+		{
+			set1:     ValueOf([]uint64{0, 1}),
+			expected: 64,
+		},
+		{
+			set1:      ValueOf([]uint64{11}),
+			fromIndex: 2,
+			expected:  3,
+		},
+		{
+			set1:        ValueOf([]uint64{10}),
+			fromIndex:   -1,
+			expectError: true,
+		},
+	}
+
+	for _, test := range testCases {
+		index, err := test.set1.NextSetBit(test.fromIndex)
+		if err != nil {
+			if test.expectError {
+				// everything is ok, continue
+				continue
+			}
+
+			t.FailNow()
+		}
+
+		assert.Equal(t, test.expected, index)
+	}
+}
