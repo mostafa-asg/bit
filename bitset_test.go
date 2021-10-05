@@ -456,10 +456,6 @@ func TestNextClearBit(t *testing.T) {
 			expected: 128,
 		},
 		{
-			set1:     ValueOf([]uint64{^uint64(0), ^uint64(0)}),
-			expected: 128,
-		},
-		{
 			set1:      ValueOf([]uint64{10}),
 			fromIndex: 1,
 			expected:  2,
