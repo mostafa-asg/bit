@@ -256,7 +256,14 @@ func (set *Set) nextBitIndex(fromIndex int, value bool) (int, error) {
 	}
 
 	lastIndex := len(set.arr)*minBits - 1
-	if fromIndex > lastIndex { // outside boundery, obviousely is clear
+
+	// outside boundery check
+	if fromIndex > lastIndex {
+		if value {
+			return -1, nil // there is no set bit outside boundary
+		}
+
+		// all is clear outside boundary
 		return fromIndex, nil
 	}
 
