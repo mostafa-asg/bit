@@ -224,6 +224,17 @@ func (set *Set) Intersects(otherSet *Set) bool {
 	return false
 }
 
+// IsEmpty returns true if this BitSet contains no bits that are set to true.
+func (set *Set) IsEmpty() bool {
+	for _, item := range set.arr {
+		if item > 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (set *Set) expandIfNeeded(arrIndex int) {
 	lastIndexNum := len(set.arr) - 1
 	if arrIndex > lastIndexNum {

@@ -396,3 +396,38 @@ func TestIntersects(t *testing.T) {
 		assert.Equal(t, test.expected, test.set1.Intersects(test.set2))
 	}
 }
+
+func TestIsEmpty(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		expected bool
+	}{
+		{
+			set1:     ValueOf([]uint64{0}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{0, 0, 0, 0}),
+			expected: true,
+		},
+		{
+			set1:     ValueOf([]uint64{0, 0, 10, 0, 0}),
+			expected: false,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set1.IsEmpty())
+	}
+
+	// tests creation via NewSet
+	s, err := NewSet(WithInitialBits(3 * 64))
+	if err != nil {
+		t.Fail()
+	}
+	assert.True(t, s.IsEmpty())
+	s.Set(4 * 64)
+	assert.False(t, s.IsEmpty())
+	s.Clear(4 * 64)
+	assert.True(t, s.IsEmpty())
+}
