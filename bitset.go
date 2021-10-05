@@ -1,6 +1,9 @@
 package bit
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 const (
 	// determines the minimum allocation bits on initialization or on grows
@@ -233,6 +236,27 @@ func (set *Set) IsEmpty() bool {
 	}
 
 	return true
+}
+
+// NextClearBit returns the index of the first bit that is set to false that
+// occurs on or after the specified starting index.
+func (set *Set) NextClearBit(fromIndex int) (int, error) {
+	if fromIndex < 0 {
+		return -1, fmt.Errorf("Index should be positive: %d", fromIndex)
+	}
+
+	lastIndex := len(set.arr)*minBits - 1
+	if fromIndex > lastIndex { // outside boundery, obviousely is clear
+		return fromIndex, nil
+	}
+
+	for i := fromIndex; i <= lastIndex; i++ {
+		if set.Get(i) == false {
+			return i, nil
+		}
+	}
+
+	return lastIndex + 1, nil
 }
 
 func (set *Set) expandIfNeeded(arrIndex int) {
