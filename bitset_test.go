@@ -667,3 +667,36 @@ func TestPreviousSetBit(t *testing.T) {
 		assert.Equal(t, test.expected, index)
 	}
 }
+
+func TestSize(t *testing.T) {
+	testCases := []struct {
+		set      *Set
+		expected int
+	}{
+		{
+			set:      ValueOf([]uint64{8}),
+			expected: minBits,
+		},
+		{
+			set:      ValueOf([]uint64{8, 0, 1}),
+			expected: 3 * minBits,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set.Size())
+	}
+
+	set, err := NewSet()
+	if err != nil {
+		t.FailNow()
+	}
+	assert.Equal(t, minBits, set.Size())
+
+	set, err = NewSet(WithInitialBits(80))
+	if err != nil {
+		t.FailNow()
+	}
+	assert.Equal(t, 2*minBits, set.Size())
+
+}
