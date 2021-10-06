@@ -116,6 +116,22 @@ func TestSet(t *testing.T) {
 	checkBits(t, s, trueIndexes)
 
 	assert.True(t, s.Get(50))
+
+	//-------------------------
+	// SetRangeValue(true)
+	// ------------------------
+	s.SetRangeValue(0, 4, true)
+	for i := 0; i < 4; i++ {
+		trueIndexes[i] = true
+	}
+	checkBits(t, s, trueIndexes)
+
+	// SetRangeValue(false)
+	s.SetRangeValue(0, 4, false)
+	for i := 0; i < 4; i++ {
+		delete(trueIndexes, i)
+	}
+	checkBits(t, s, trueIndexes)
 }
 
 func TestCardinality(t *testing.T) {

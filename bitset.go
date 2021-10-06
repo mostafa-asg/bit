@@ -114,6 +114,14 @@ func (set *Set) SetRange(fromIndex int, toIndex int) {
 	}
 }
 
+// SetRangeValue sets the bits from the specified fromIndex (inclusive)
+// to the specified toIndex (exclusive) to the specified value.
+func (set *Set) SetRangeValue(fromIndex int, toIndex int, value bool) {
+	for i := fromIndex; i < toIndex; i++ {
+		set.SetValue(i, value)
+	}
+}
+
 // Get returns the value of the bit with the specified index.
 func (set *Set) Get(index int) bool {
 	arrIndex, bitIndex := set.locate(index)
