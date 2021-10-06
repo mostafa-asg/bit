@@ -250,6 +250,35 @@ func (set *Set) NextSetBit(fromIndex int) (int, error) {
 	return set.nextBitIndex(fromIndex, true)
 }
 
+// PreviousClearBit returns the index of the nearest bit that is set to false that
+// occurs on or before the specified starting index.
+// If no such bit exists, or if -1 is given as the starting index, then -1 is returned.
+func (set *Set) PreviousClearBit(fromIndex int) (int, error) {
+	if fromIndex < -1 {
+		return -1, fmt.Errorf("Index is negative: %d", fromIndex)
+	}
+
+	if fromIndex == -1 {
+		return -1, nil
+	}
+
+	lastIndex := len(set.arr)*minBits - 1
+
+	// outside boundery check
+	if fromIndex > lastIndex {
+		// all is clear outside boundary
+		return fromIndex, nil
+	}
+
+	for i := fromIndex; i >= 0; i-- {
+		if set.Get(i) == false {
+			return i, nil
+		}
+	}
+
+	return -1, nil
+}
+
 func (set *Set) nextBitIndex(fromIndex int, value bool) (int, error) {
 	if fromIndex < 0 {
 		return -1, fmt.Errorf("Index should be positive: %d", fromIndex)

@@ -541,3 +541,60 @@ func TestNextSetBit(t *testing.T) {
 		assert.Equal(t, test.expected, index)
 	}
 }
+
+func TestPreviousClearBit(t *testing.T) {
+	testCases := []struct {
+		set1        *Set
+		fromIndex   int
+		expected    int
+		expectError bool
+	}{
+		{
+			set1:      ValueOf([]uint64{8}),
+			fromIndex: 3,
+			expected:  2,
+		},
+		{
+			set1:     ValueOf([]uint64{1}),
+			expected: -1,
+		},
+		{
+			set1:      ValueOf([]uint64{0, 1}),
+			fromIndex: 64,
+			expected:  63,
+		},
+		{
+			// outside boundary check
+			set1:        ValueOf([]uint64{10}),
+			fromIndex:   -1,
+			expected:    -1,
+			expectError: false,
+		},
+		{
+			// outside boundary check
+			set1:        ValueOf([]uint64{15}),
+			fromIndex:   -2,
+			expectError: true,
+		},
+		{
+			// outside boundary check
+			set1:      ValueOf([]uint64{15}),
+			fromIndex: 70,
+			expected:  70,
+		},
+	}
+
+	for _, test := range testCases {
+		index, err := test.set1.PreviousClearBit(test.fromIndex)
+		if err != nil {
+			if test.expectError {
+				// everything is ok, continue
+				continue
+			}
+
+			t.FailNow()
+		}
+
+		assert.Equal(t, test.expected, index)
+	}
+}
