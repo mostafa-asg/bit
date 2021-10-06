@@ -220,6 +220,15 @@ func (set *Set) Clone() *Set {
 	return copySet
 }
 
+// ToArray returns a new array containing all the bits in this bit set.
+func (set *Set) ToArray() []uint64 {
+	result := make([]uint64, len(set.arr))
+
+	copy(result, set.arr)
+
+	return result
+}
+
 // Intersects returns true if the specified BitSet has any bits set to true that
 // are also set to true in this BitSet.
 func (set *Set) Intersects(otherSet *Set) bool {

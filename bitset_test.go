@@ -698,5 +698,27 @@ func TestSize(t *testing.T) {
 		t.FailNow()
 	}
 	assert.Equal(t, 2*minBits, set.Size())
+}
 
+func TestToArray(t *testing.T) {
+	testCases := []struct {
+		set      *Set
+		expected []uint64
+	}{
+		{
+			set:      ValueOf([]uint64{8, 7, 12}),
+			expected: []uint64{8, 7, 12},
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set.ToArray())
+	}
+
+	set, err := NewSet()
+	if err != nil {
+		t.FailNow()
+	}
+	set.Set(4)
+	assert.Equal(t, []uint64{16}, set.ToArray())
 }
