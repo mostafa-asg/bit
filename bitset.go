@@ -1,8 +1,10 @@
 package bit
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 const (
@@ -279,6 +281,35 @@ func (set *Set) PreviousClearBit(fromIndex int) (int, error) {
 // If no such bit exists, or if -1 is given as the starting index, then -1 is returned.
 func (set *Set) PreviousSetBit(fromIndex int) (int, error) {
 	return set.previousBitIndex(fromIndex, true)
+}
+
+// String returns a string representation of this bit set. For every index
+// for which this BitSet contains a bit in the set state, the decimal
+// representation of that index is included in the result. Such indices are
+// listed in order from lowest to highest, separated by ", " (a comma and a space) and
+// surrounded by braces, resulting in the usual mathematical notation for a
+// set of integers.
+func (set *Set) String() string {
+	b := bytes.Buffer{}
+
+	index := 0
+	for {
+		i, _ := set.NextSetBit(index)
+		if i == -1 {
+			break
+		}
+		b.WriteString(", ")
+		b.WriteString(strconv.Itoa(i))
+
+		index = i + 1
+	}
+
+	content := b.String()
+	if len(content) > 0 {
+		content = content[2:] // remove first ", "
+	}
+
+	return "{" + content + "}"
 }
 
 func (set *Set) previousBitIndex(fromIndex int, value bool) (int, error) {

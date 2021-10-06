@@ -737,3 +737,23 @@ func TestToArray(t *testing.T) {
 	set.Set(4)
 	assert.Equal(t, []uint64{16}, set.ToArray())
 }
+
+func TestString(t *testing.T) {
+	testCases := []struct {
+		set      *Set
+		expected string
+	}{
+		{
+			set:      ValueOf([]uint64{0}),
+			expected: "{}",
+		},
+		{
+			set:      ValueOf([]uint64{8, 7}),
+			expected: "{3, 64, 65, 66}",
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set.String())
+	}
+}
