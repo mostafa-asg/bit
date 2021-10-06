@@ -530,6 +530,11 @@ func TestNextSetBit(t *testing.T) {
 			expected:  3,
 		},
 		{
+			set1:      ValueOf([]uint64{0}),
+			fromIndex: 0,
+			expected:  -1,
+		},
+		{
 			// outside boundary check
 			set1:        ValueOf([]uint64{10}),
 			fromIndex:   -1,
@@ -580,6 +585,11 @@ func TestPreviousClearBit(t *testing.T) {
 			expected:  63,
 		},
 		{
+			set1:      ValueOf([]uint64{^uint64(0)}),
+			fromIndex: 63,
+			expected:  -1,
+		},
+		{
 			// outside boundary check
 			set1:        ValueOf([]uint64{10}),
 			fromIndex:   -1,
@@ -622,6 +632,11 @@ func TestPreviousSetBit(t *testing.T) {
 		expected    int
 		expectError bool
 	}{
+		{
+			set1:      ValueOf([]uint64{0}),
+			fromIndex: 63,
+			expected:  -1,
+		},
 		{
 			set1:      ValueOf([]uint64{8}),
 			fromIndex: 3,

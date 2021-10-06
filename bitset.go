@@ -335,6 +335,12 @@ func (set *Set) nextBitIndex(fromIndex int, value bool) (int, error) {
 		}
 	}
 
+	if value {
+		// no set bit found
+		return -1, nil
+	}
+
+	// value equals to false
 	return lastIndex + 1, nil
 }
 
