@@ -55,6 +55,26 @@ func ValueOf(nums []uint64) *Set {
 	return set
 }
 
+// FromByteArray returns a new bit set containing all the bits in the given byte array.
+func FromByteArray(nums []byte) *Set {
+	arr := make([]uint64, 0)
+	size := 8
+
+	if rem := len(nums) % size; rem != 0 {
+		total := size - rem
+		for i := 1; i <= total; i++ {
+			nums = append(nums, 0) // LittleEndian.Uint64 expected 8 bytes
+		}
+	}
+
+	for len(nums) > 0 {
+		arr = append(arr, binary.LittleEndian.Uint64(nums[0:size]))
+		nums = nums[size:]
+	}
+
+	return ValueOf(arr)
+}
+
 // Flip sets the bit at the specified index to the complement of its current value.
 func (set *Set) Flip(index int) *Set {
 	arrIndex, bitIndex := set.locate(index)

@@ -758,6 +758,34 @@ func TestBytes(t *testing.T) {
 	}
 }
 
+func TestFromByteArray(t *testing.T) {
+	testCases := []struct {
+		arr      []byte
+		expected *Set
+	}{
+		{
+			arr:      []byte{0},
+			expected: ValueOf([]uint64{0}),
+		},
+		{
+			arr:      []byte{8, 0, 0, 0},
+			expected: ValueOf([]uint64{8}),
+		},
+		{
+			arr:      []byte{255, 0, 0, 0, 0, 0, 0, 0},
+			expected: ValueOf([]uint64{255}),
+		},
+		{
+			arr:      []byte{255, 0, 0, 0, 0, 0, 0, 0, 7},
+			expected: ValueOf([]uint64{255, 7}),
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, FromByteArray(test.arr))
+	}
+}
+
 func TestString(t *testing.T) {
 	testCases := []struct {
 		set      *Set
