@@ -2,6 +2,7 @@ package bit
 
 import (
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"strconv"
@@ -229,6 +230,17 @@ func (set *Set) ToArray() []uint64 {
 	copy(result, set.arr)
 
 	return result
+}
+
+// Bytes returns a new byte array containing all the bits in this bit set.
+func (set *Set) Bytes() []byte {
+	buf := new(bytes.Buffer)
+
+	for _, item := range set.arr {
+		binary.Write(buf, binary.LittleEndian, item)
+	}
+
+	return buf.Bytes()
 }
 
 // Intersects returns true if the specified BitSet has any bits set to true that
