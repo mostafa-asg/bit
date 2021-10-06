@@ -254,6 +254,17 @@ func (set *Set) NextSetBit(fromIndex int) (int, error) {
 // occurs on or before the specified starting index.
 // If no such bit exists, or if -1 is given as the starting index, then -1 is returned.
 func (set *Set) PreviousClearBit(fromIndex int) (int, error) {
+	return set.previousBitIndex(fromIndex, false)
+}
+
+// PreviousSetBit returns the index of the nearest bit that is set to true that
+// occurs on or before the specified starting index.
+// If no such bit exists, or if -1 is given as the starting index, then -1 is returned.
+func (set *Set) PreviousSetBit(fromIndex int) (int, error) {
+	return set.previousBitIndex(fromIndex, true)
+}
+
+func (set *Set) previousBitIndex(fromIndex int, value bool) (int, error) {
 	if fromIndex < -1 {
 		return -1, fmt.Errorf("Index is negative: %d", fromIndex)
 	}
@@ -266,12 +277,17 @@ func (set *Set) PreviousClearBit(fromIndex int) (int, error) {
 
 	// outside boundery check
 	if fromIndex > lastIndex {
-		// all is clear outside boundary
-		return fromIndex, nil
+		if value {
+			// we know all bits are clear, no need to search
+			fromIndex = lastIndex
+		} else {
+			// all is clear outside boundary
+			return fromIndex, nil
+		}
 	}
 
 	for i := fromIndex; i >= 0; i-- {
-		if set.Get(i) == false {
+		if set.Get(i) == value {
 			return i, nil
 		}
 	}
