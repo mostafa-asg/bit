@@ -805,3 +805,27 @@ func TestString(t *testing.T) {
 		assert.Equal(t, test.expected, test.set.String())
 	}
 }
+
+func TestLength(t *testing.T) {
+	testCases := []struct {
+		set      *Set
+		expected int
+	}{
+		{
+			set:      ValueOf([]uint64{0}),
+			expected: 0,
+		},
+		{
+			set:      ValueOf([]uint64{9}),
+			expected: 3 + 1,
+		},
+		{
+			set:      ValueOf([]uint64{9, 2}),
+			expected: 65 + 1,
+		},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, test.set.Length())
+	}
+}

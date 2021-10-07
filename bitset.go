@@ -158,6 +158,17 @@ func (set *Set) Size() int {
 	return len(set.arr) * minBits
 }
 
+// Length returns the "logical size" of this BitSet: the index of the
+// highest set bit in the BitSet plus one.
+// Returns zero if the BitSet contains no set bits.
+func (set *Set) Length() int {
+	index, _ := set.PreviousSetBit(set.Size() - 1)
+	if index == -1 {
+		return 0
+	}
+	return index + 1
+}
+
 // Cardinality returns the number of bits set to true in this BitSet.
 func (set *Set) Cardinality() int {
 	count := 0
