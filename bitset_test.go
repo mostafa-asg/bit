@@ -829,3 +829,32 @@ func TestLength(t *testing.T) {
 		assert.Equal(t, test.expected, test.set.Length())
 	}
 }
+
+func TestOr(t *testing.T) {
+	testCases := []struct {
+		set1     *Set
+		set2     *Set
+		expected *Set
+	}{
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{10}),
+			expected: ValueOf([]uint64{15}),
+		},
+		{
+			set1:     ValueOf([]uint64{15, 32}),
+			set2:     ValueOf([]uint64{10}),
+			expected: ValueOf([]uint64{15, 32}),
+		},
+		{
+			set1:     ValueOf([]uint64{15}),
+			set2:     ValueOf([]uint64{10, 32}),
+			expected: ValueOf([]uint64{15}),
+		},
+	}
+
+	for _, test := range testCases {
+		result := test.set1.Or(test.set2)
+		assert.True(t, test.expected.Equal(result))
+	}
+}

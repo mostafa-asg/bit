@@ -206,6 +206,20 @@ func (set *Set) AndNot(otherSet *Set) *Set {
 	return set.Xor(tmp)
 }
 
+// Or performs a logical OR of this bit set with the bit set argument.
+// This bit set is modified so that a bit in it has the value true if and only if
+// it either already had the value true or the corresponding bit in the
+// bit set argument has the value true.
+func (set *Set) Or(otherSet *Set) *Set {
+	length := min(len(set.arr), len(otherSet.arr))
+
+	for i := 0; i < length; i++ {
+		set.arr[i] |= otherSet.arr[i]
+	}
+
+	return set
+}
+
 // Xor performs a logical XOR of this bit set with the bit set argument.
 func (set *Set) Xor(otherSet *Set) *Set {
 	length := min(len(set.arr), len(otherSet.arr))
