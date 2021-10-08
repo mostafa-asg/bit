@@ -103,19 +103,20 @@ func (set *Set) FlipRange(fromIndex int, toIndex int) *Set {
 
 // Clear sets the bit specified by the index to false.
 // If index is negative no change will happen.
-func (set *Set) Clear(index int) {
+func (set *Set) Clear(index int) *Set {
 	if index < 0 {
 		// do nothing
-		return
+		return set
 	}
 
 	arrIndex, bitIndex := set.locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] & (^(1 << bitIndex))
+	return set
 }
 
 // ClearRange sets the bits from the specified fromIndex (inclusive)
 // to the specified toIndex (exclusive) to false.
-func (set *Set) ClearRange(fromIndex int, toIndex int) {
+func (set *Set) ClearRange(fromIndex int, toIndex int) *Set {
 	if fromIndex < 0 {
 		fromIndex = 0
 	}
@@ -123,6 +124,8 @@ func (set *Set) ClearRange(fromIndex int, toIndex int) {
 	for i := fromIndex; i < toIndex; i++ {
 		set.Clear(i)
 	}
+
+	return set
 }
 
 // ClearAll sets all of the bits in this BitSet to false.
@@ -135,42 +138,44 @@ func (set *Set) ClearAll() *Set {
 
 // Set sets the bit at the specified index to true.
 // If index is negative no change will happen.
-func (set *Set) Set(index int) {
+func (set *Set) Set(index int) *Set {
 	if index < 0 {
 		// do nothing
-		return
+		return set
 	}
 
 	arrIndex, bitIndex := set.locate(index)
 	set.arr[arrIndex] = set.arr[arrIndex] | (1 << bitIndex)
+	return set
 }
 
 // SetValue sets the bit at the specified index to the specified value.
-func (set *Set) SetValue(index int, value bool) {
-	switch value {
-	case true:
-		set.Set(index)
-	case false:
-		set.Clear(index)
+func (set *Set) SetValue(index int, value bool) *Set {
+	if value {
+		return set.Set(index)
 	}
+
+	return set.Clear(index)
 }
 
 // SetRange sets the bits from the specified fromIndex (inclusive)
 // to the specified toIndex (exclusive) to true.
-func (set *Set) SetRange(fromIndex int, toIndex int) {
+func (set *Set) SetRange(fromIndex int, toIndex int) *Set {
 	if fromIndex < 0 {
 		// do nothing
-		return
+		return set
 	}
 
 	for i := fromIndex; i < toIndex; i++ {
 		set.Set(i)
 	}
+
+	return set
 }
 
 // SetRangeValue sets the bits from the specified fromIndex (inclusive)
 // to the specified toIndex (exclusive) to the specified value.
-func (set *Set) SetRangeValue(fromIndex int, toIndex int, value bool) {
+func (set *Set) SetRangeValue(fromIndex int, toIndex int, value bool) *Set {
 	if fromIndex < 0 {
 		fromIndex = 0
 	}
@@ -178,6 +183,8 @@ func (set *Set) SetRangeValue(fromIndex int, toIndex int, value bool) {
 	for i := fromIndex; i < toIndex; i++ {
 		set.SetValue(i, value)
 	}
+
+	return set
 }
 
 // Get returns the value of the bit with the specified index.
