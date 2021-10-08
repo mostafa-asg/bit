@@ -858,3 +858,36 @@ func TestOr(t *testing.T) {
 		assert.True(t, test.expected.Equal(result))
 	}
 }
+
+func TestGetRange(t *testing.T) {
+	testCases := []struct {
+		set       *Set
+		fromIndex int
+		toIndex   int
+		expected  *Set
+	}{
+		{
+			set:       ValueOf([]uint64{10}),
+			fromIndex: 1,
+			toIndex:   4,
+			expected:  ValueOf([]uint64{5}),
+		},
+		{
+			set:       ValueOf([]uint64{2, 1}),
+			fromIndex: 1,
+			toIndex:   65,
+			expected:  ValueOf([]uint64{(1 << 63) + 1}),
+		},
+		{
+			set:       ValueOf([]uint64{15}),
+			fromIndex: 4,
+			toIndex:   10,
+			expected:  ValueOf([]uint64{0}),
+		},
+	}
+
+	for _, test := range testCases {
+		result := test.set.GetRange(test.fromIndex, test.toIndex)
+		assert.True(t, test.expected.Equal(result))
+	}
+}

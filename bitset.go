@@ -152,6 +152,20 @@ func (set *Set) Get(index int) bool {
 	return value > 0
 }
 
+// GetRange returns a new BitSet composed of bits from this BitSet from fromIndex (inclusive)
+// to toIndex (exclusive).
+func (set *Set) GetRange(fromIndex int, toIndex int) *Set {
+	result, _ := NewSet()
+	resultIndex := 0
+
+	for i := fromIndex; i < toIndex; i++ {
+		result.SetValue(resultIndex, set.Get(i))
+		resultIndex++
+	}
+
+	return result
+}
+
 // Size returns the number of bits of space actually in use by this BitSet
 // to represent bit values.
 func (set *Set) Size() int {
