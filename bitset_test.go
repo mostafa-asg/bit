@@ -75,6 +75,11 @@ func TestSet(t *testing.T) {
 	s.Set(3 * minBits)
 	trueIndexes[3*minBits] = true
 	checkBits(t, s, trueIndexes)
+
+	// should have no side effect
+	s.Clear(-1)
+	s.Set(-1)
+	checkBits(t, s, trueIndexes)
 	// ------------------------
 	// Clear
 	// ------------------------
@@ -132,6 +137,18 @@ func TestSet(t *testing.T) {
 		delete(trueIndexes, i)
 	}
 	checkBits(t, s, trueIndexes)
+}
+
+func TestGet(t *testing.T) {
+	set, _ := NewSet()
+	set.Set(0)
+	set.Set(1)
+	assert.True(t, set.Get(0))
+	assert.True(t, set.Get(1))
+
+	// outside boundary
+	assert.False(t, set.Get(-1))
+	assert.False(t, set.Get(set.Size()))
 }
 
 func TestCardinality(t *testing.T) {
@@ -326,6 +343,10 @@ func TestClearAll(t *testing.T) {
 
 func TestFlip(t *testing.T) {
 	s := ValueOf([]uint64{14})
+
+	// no changes will apply
+	s.Flip(-4)
+	assert.True(t, ValueOf([]uint64{14}).Equal(s))
 
 	s.Flip(0)
 	assert.True(t, ValueOf([]uint64{15}).Equal(s))
